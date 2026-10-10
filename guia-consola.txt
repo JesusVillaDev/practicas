@@ -1,0 +1,128 @@
+========================================================================
+             GUÍA DE COMANDOS DE CONSOLA (BASH / UNIX)
+========================================================================
+
+Esta guía contiene los comandos fundamentales para interactuar con tu 
+sistema operativo desde la terminal. Estos comandos operan en tu disco 
+duro real, de forma independiente a Git (aunque se usan en conjunto).
+
+------------------------------------------------------------------------
+1. NAVEGACIÓN Y UBICACIÓN (Moviéndote por el sistema)
+------------------------------------------------------------------------
+
+* pwd > pwd
+  - (Print Working Directory): Muestra la ruta completa y exacta de la carpeta en la que estás ubicado actualmente (ej. /c/wamp64/www/practicas-git). Útil cuando estás perdido.
+
+* cd > cd nombre-carpeta
+  - (Change Directory): Entra a una carpeta específica que esté dentro de tu ubicación actual.
+
+* cd .. > cd ..
+  - Sube un nivel en la jerarquía de carpetas (sale de la carpeta actual hacia la carpeta "padre").
+
+* cd ~ > cd ~
+  - Te lleva instantáneamente a tu directorio de usuario principal (Home), sin importar dónde estés.
+
+* cd - > cd -
+  - Te regresa exactamente a la carpeta en la que estabas justo antes del último 'cd' que ejecutaste (como el botón "Atrás" del navegador).
+
+* ls > ls
+  - (List): Muestra los archivos y carpetas visibles dentro de tu ubicación actual.
+
+* ls -a > ls -a
+  - Muestra TODOS los archivos, incluyendo los ocultos (los que empiezan con un punto, como '.git' o '.env').
+
+* ls -l > ls -l
+  - Muestra una lista detallada en formato vertical. Incluye permisos, creador, tamaño del archivo y fecha de última modificación.
+
+* ls -la > ls -la
+  - (Combinación): Muestra una lista detallada vertical de absolutamente todo, incluyendo archivos ocultos.
+
+
+------------------------------------------------------------------------
+2. CREACIÓN Y GESTIÓN DE ARCHIVOS / DIRECTORIOS
+------------------------------------------------------------------------
+
+* mkdir > mkdir nueva-carpeta
+  - (Make Directory): Crea una nueva carpeta en tu ubicación actual.
+
+* mkdir -p > mkdir -p carpeta1/carpeta2/carpeta3
+  - Crea múltiples carpetas anidadas de un solo golpe. Si la 'carpeta1' ya existe, no da error, simplemente crea lo que falta por dentro.
+
+* touch > touch index.html
+  - Crea un archivo completamente vacío. Si el archivo ya existía, no borra su contenido, solo actualiza su "fecha de última modificación".
+
+* cp > cp archivo.txt copia.txt
+  - (Copy): Crea un duplicado exacto de un archivo. El primero es el original, el segundo es el nombre de la copia.
+
+* cp -r > cp -r carpeta-original carpeta-copia
+  - Copia una carpeta entera con todo su contenido (archivos y subcarpetas) por dentro. La 'r' significa recursivo.
+
+* mv (Mover) > mv estilo.css ./css/estilo.css
+  - (Move): Mueve un archivo o carpeta de un lugar a otro. En el ejemplo, mueve 'estilo.css' dentro de la carpeta 'css'.
+
+* mv (Renombrar) > mv nombre-viejo.txt nombre-nuevo.txt
+  - Si usas 'mv' en la misma ubicación, funciona para renombrar archivos o carpetas al instante.
+
+
+------------------------------------------------------------------------
+3. ELIMINACIÓN Y LIMPIEZA (¡Precaución!)
+------------------------------------------------------------------------
+
+* rm > rm archivo.txt
+  - (Remove): Elimina un archivo permanentemente (no pasa por la Papelera de reciclaje).
+  - NOTA GIT: Si el archivo ya estaba siendo rastreado por Git, usar 'rm' lo borra de tu disco, pero Git te pedirá que hagas 'git add archivo.txt' para registrar esa eliminación. Para hacerlo en un paso, usa mejor 'git rm archivo.txt'.
+
+* rm -r > rm -r mi-carpeta
+  - Elimina una carpeta completa y todo lo que contenga adentro. Te pedirá confirmación si hay archivos protegidos.
+
+* rm -rf > rm -rf node_modules
+  - (Remove Recursive Force): El comando de borrado más poderoso. Elimina carpetas y todo su contenido a la fuerza, sin preguntar ni pedir confirmaciones. Úsalo con extrema precaución.
+
+* clear > clear
+  - Limpia todo el texto visible en tu terminal para que tengas una pantalla en blanco. (Atajo de teclado: Ctrl + L).
+
+
+------------------------------------------------------------------------
+4. ESCRITURA Y LECTURA DE ARCHIVOS DESDE CONSOLA
+------------------------------------------------------------------------
+
+* echo > echo "Hola Mundo"
+  - Imprime texto directamente en la consola.
+
+* echo con > (Sobrescribir) > echo "Texto nuevo" > archivo.txt
+  - Escribe texto en un archivo. Si el archivo no existe, lo crea. Si ya existe, BORRA todo su contenido anterior y lo reemplaza con el texto nuevo.
+
+* echo con >> (Añadir) > echo "Linea extra" >> archivo.txt
+  - Añade texto al FINAL de un archivo. Si el archivo no existe, lo crea. Si existe, respeta todo lo que tenía antes y agrega la nueva línea hasta abajo.
+
+* cat > cat archivo.txt
+  - (Concatenate): Muestra todo el contenido de un archivo directamente en la consola. Ideal para archivos pequeños.
+
+* less > less log-servidor.txt
+  - Abre un archivo grande en un modo de lectura interactivo. Te permite usar las flechas del teclado para subir y bajar. Presiona 'q' para salir de esta vista.
+
+
+------------------------------------------------------------------------
+5. BÚSQUEDA Y UTILIDADES
+------------------------------------------------------------------------
+
+* grep > grep "password" config.js
+  - Busca una palabra o fragmento de texto específico dentro de un archivo y te muestra la línea exacta donde lo encontró.
+
+* grep -i > grep -i "error" log.txt
+  - Busca ignorando mayúsculas y minúsculas (Insensitive). Encontrará "Error", "ERROR" o "error".
+
+* history > history
+  - Muestra una lista numerada de todos los comandos que has ejecutado recientemente en tu terminal.
+
+
+------------------------------------------------------------------------
+6. ATAJOS DE TECLADO ESENCIALES EN BASH
+------------------------------------------------------------------------
+
+* Flecha Arriba / Abajo : Navega por el historial de comandos que ya escribiste.
+* Tabulador (Tab)       : Autocompleta nombres de archivos y carpetas automáticamente (¡Úsalo siempre para evitar errores de tipeo!).
+* Ctrl + C              : Cancela y detiene cualquier comando, proceso o servidor que se esté ejecutando y te devuelve el control de la terminal.
+* Ctrl + L              : Limpia la terminal (igual que el comando 'clear').
+* Ctrl + A              : Mueve el cursor rápidamente al INICIO de la línea que estás escribiendo.
+* Ctrl + E              : Mueve el cursor rápidamente al FINAL de la línea que estás escribiendo.
