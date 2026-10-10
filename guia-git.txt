@@ -1,0 +1,226 @@
+========================================================================
+                      GUÍA DE GIT BASH: DE CERO A 100
+========================================================================
+
+1. ESTÁNDAR Y BUENAS PRÁCTICAS EN COMMITS (CONVENTIONAL COMMITS)
+------------------------------------------------------------------------
+Anatomía de un commit profesional:
+  <tipo>(<ámbito opcional>): <descripción breve en modo imperativo>
+
+Principales tipos de commits y su ocasión de uso:
+* feat: Se usa al agregar una nueva funcionalidad. Ejemplo: feat(auth): agregar inicio de sesion
+* fix: Se usa al corregir un error (bug). Ejemplo: fix(cart): corregir calculo del total
+* docs: Cambios exclusivos en la documentación. Ejemplo: docs: actualizar README
+* style: Cambios de formato (espacios, comas). Ejemplo: style: corregir identacion
+* refactor: Reestructurar código sin añadir características ni corregir errores. Ejemplo: refactor(api): optimizar consulta
+* perf: Mejorar el rendimiento. Ejemplo: perf(images): reducir peso de imagenes
+* test: Añadir o corregir pruebas unitarias. Ejemplo: test(user): validar email
+* chore: Tareas de mantenimiento. Ejemplo: chore: actualizar dependencias
+
+Reglas clave de redacción:
+  - Redactar en modo imperativo (dar una orden): "corregir" en lugar de "corregido".
+  - Mantener la primera línea concisa (máximo 50 a 72 caracteres).
+  - No escribir punto final al terminar el título del commit.
+
+
+2. FLUJO DE TRABAJO 1: DESDE CERO HASTA EL PRIMER PUSH
+------------------------------------------------------------------------
+1. Crear el directorio del proyecto:
+   mkdir mi-proyecto
+   - Crea una nueva carpeta en tu sistema operativo.
+
+2. Entrar al directorio:
+   cd mi-proyecto
+   - Navega hacia dentro de la carpeta seleccionada.
+
+3. Inicializar el repositorio:
+   git init
+   - Convierte la carpeta en un repositorio de Git creando la estructura oculta .git.
+
+4. Crear el primer archivo:
+   echo "# Mi Proyecto" > README.md
+   - Genera un archivo con contenido inicial.
+
+5. Agregar al área de preparación:
+   git add README.md
+   - Prepara el archivo para el próximo commit.
+
+6. Guardar el primer commit:
+   git commit -m "feat: commit inicial"
+   - Registra la instantánea en la base de datos local.
+
+7. Renombrar la rama principal:
+   git branch -M main
+   - Establece 'main' como el nombre estándar.
+
+8. Vincular el repositorio remoto:
+   git remote add origin git@github.com:usuario/mi-proyecto.git
+   - Conecta tu repositorio local con el servidor remoto.
+
+9. Subir los cambios:
+   git push -u origin main
+   - Envía los cambios al servidor remoto y establece el enlace de rastreo.
+
+
+3. ESTÁNDARES DE RAMAS Y FLUJO COLABORATIVO
+------------------------------------------------------------------------
+A. Estándares para nombrar ramas (Branching Naming Conventions)
+Al igual que los commits, las ramas deben tener un propósito claro. Nunca trabajes directamente en 'main'. Usa estos prefijos estándar:
+
+* main: Rama principal. Contiene el código de producción estable. NUNCA se comitea aquí directamente.
+* feat/: Para desarrollar nuevas funcionalidades. (Ej: feat/login-usuario, feat/pasarela-pago)
+* fix/: Para solucionar errores en el código. (Ej: fix/error-calculo-iva)
+* hotfix/: Para errores críticos en producción que urgen. (Ej: hotfix/caida-base-datos)
+* docs/: Para escribir documentación profunda. (Ej: docs/manual-api)
+
+Reglas de formato: 
+- Todo en minúsculas.
+- Separar palabras con guiones medios (-), nunca usar espacios ni guiones bajos.
+- Ser descriptivo pero corto.
+
+
+B. Flujo Colaborativo Paso a Paso (Tú vs. Colaborador)
+Escenario: El proyecto ya está en GitHub. Tú vas a desarrollar el "Login" y tu compañera (Ana) está desarrollando el "Menú de Navegación".
+
+1. Tú: Preparas tu entorno local antes de empezar a trabajar.
+   git switch main
+   git pull origin main
+   - ¿Qué haces?: Te aseguras de estar en la rama principal y descargas cualquier cambio que otros hayan subido al servidor.
+   - Estado del repo: Tu PC está 100% sincronizada con GitHub.
+
+2. Tú: Creas tu entorno aislado para no interferir con nadie.
+   git switch -c feat/login-usuario
+   - ¿Qué haces?: Creas una nueva rama y te mueves a ella.
+   - Estado del repo: Tienes un clon virtual del código. Todo lo que hagas a partir de ahora es invisible para 'main'.
+
+3. Tú: Desarrollas tu funcionalidad.
+   echo "Codigo del login" > login.js
+   git add login.js
+   git commit -m "feat(auth): crear estructura del login"
+   - ¿Qué haces?: Creas tu archivo, lo preparas y lo guardas en el historial de tu rama.
+   - Estado del repo: Tu rama 'feat/login-usuario' va un paso adelante. Tu 'main' local sigue intacto.
+
+4. Ana (Colaboradora): Termina su tarea y la sube al servidor.
+   - ¿Qué hace ella?: Ana finaliza su rama 'feat/menu', la sube a GitHub y la fusiona a la rama 'main' remota.
+   - Estado del repo remoto: La rama 'main' en GitHub acaba de ser actualizada con un nuevo Menú.
+   - Estado de tu repo local: TÚ NO SABES ESTO AÚN. En tu PC, no existe el código de Ana.
+
+5. Tú: Descargas los cambios de tu compañera.
+   git switch main
+   git pull origin main
+   - ¿Qué haces?: Vuelves a tu rama principal y descargas las actualizaciones de GitHub.
+   - Estado del repo: Tu rama 'main' local ahora incluye el Menú que hizo Ana. Tu rama 'feat/login-usuario' aún no lo tiene.
+
+6. Tú: Actualizas tu rama de trabajo con el código nuevo.
+   git switch feat/login-usuario
+   git merge main
+   - ¿Qué haces?: Estando dentro de tu rama de login, "absorbes" los cambios que llegaron a main (el menú de Ana).
+   - Estado del repo: Tu rama de login ahora tiene TU código del login + EL CÓDIGO del menú de Ana. (Si ambos hubieran editado la misma línea del mismo archivo, Git pausaría aquí para que resuelvas el "Conflicto" manualmente).
+
+7. Tú: Subes tu funcionalidad terminada a GitHub.
+   git push -u origin feat/login-usuario
+   - ¿Qué haces?: Envías tu rama aislada al servidor remoto para que el equipo la revise (Pull Request).
+   - Estado del repo remoto: Ahora GitHub tiene tu rama guardada a salvo.
+
+8. Tú: Fusionas tu trabajo a producción (Simulando que ya te lo aprobaron).
+   git switch main
+   git merge feat/login-usuario
+   git push origin main
+   - ¿Qué haces?: Te cambias a la rama principal, absorbes tu rama de login y empujas el resultado final a GitHub.
+   - Estado FINAL del repo: La rama 'main' (tanto en tu PC como en GitHub) ahora contiene el código inicial + el Menú de Ana + tu Login. Todo integrado perfectamente sin que nadie haya interrumpido a nadie.
+
+
+4. DICCIONARIO COMPLETO Y VARIANTES DE COMANDOS DE GIT
+------------------------------------------------------------------------
+
+A. Inicialización y Clonación
+* git init
+  - Convierte la carpeta actual en un repositorio local de Git creando la estructura interna .git.
+* git clone git@github.com:usuario/repo.git
+  - Descarga una copia completa de un repositorio remoto a tu computadora local.
+
+B. Estado y Ciclo de Vida (Staging & Status)
+* git status
+  - Muestra el estado detallado del directorio de trabajo y del área de preparación.
+* git add index.html
+  - Prepara un archivo específico para el siguiente commit.
+* git add .
+  - Agrega todos los archivos modificados y nuevos del proyecto al área de preparación.
+* git restore app.js
+  - Descarta los cambios locales no guardados en un archivo y lo regresa al estado del último commit.
+* git restore --staged configuracion.json
+  - Saca un archivo del área de preparación sin borrar las modificaciones realizadas en tu código.
+
+C. Commits (Guardado e Historial de Instantáneas)
+* git commit -m "feat(auth): agregar validacion de usuario"
+  - Guarda los cambios del área de preparación en el historial con un mensaje descriptivo.
+* git commit -am "fix(styles): corregir margen superior"
+  - Agrega los archivos modificados al staging y realiza el commit en un solo paso.
+* git commit --amend --no-edit
+  - Agrega los nuevos cambios del staging al último commit realizado sin modificar su mensaje.
+* git commit --amend -m "fix(styles): corregir margen y padding"
+  - Modifica tanto el contenido como el mensaje del último commit realizado.
+
+D. Inspección, Comparación e Historial (Log, Diff & Audit)
+* git log
+  - Muestra el historial cronológico completo de commits.
+* git log --oneline --graph --all
+  - Muestra un árbol gráfico simplificado de todas las ramas y commits del repositorio.
+* git diff
+  - Muestra los cambios no preparados entre tu directorio de trabajo y el área de preparación.
+* git diff --staged
+  - Muestra las diferencias entre los archivos en el área de preparación y el último commit.
+* git diff main..feature
+  - Compara las diferencias de código exactas entre dos ramas distintas.
+* git ls-files
+  - Lista todos los archivos que están siendo rastreados actualmente por Git.
+
+E. Gestión de Ramas (Branching)
+* git branch
+  - Lista todas las ramas locales e indica en cuál estás posicionado.
+* git switch main
+  - Cambia la sesión de trabajo a la rama especificada.
+* git switch -c feature/login
+  - Crea una nueva rama y se posiciona en ella inmediatamente.
+* git branch -d feature/login
+  - Elimina una rama local de forma segura, verificando que sus cambios ya hayan sido fusionados.
+* git branch -D feature/login
+  - Fuerza la eliminación de una rama local sin importar si tiene cambios no fusionados.
+* git branch -m nombre-viejo nombre-nuevo
+  - Renombra una rama local existente.
+
+F. Integración y Reescritura de Historial (Merge & Rebase)
+* git merge feature/login
+  - Fusiona los cambios de la rama especificada dentro de la rama actual.
+* git merge --abort
+  - Cancela el proceso de fusión actual y regresa el repositorio al estado previo a los conflictos.
+* git rebase main
+  - Aplica los commits de la rama actual encima de la punta de la rama main para mantener un historial lineal.
+* git rebase --abort
+  - Aborta una operación de rebase en proceso.
+
+G. Reversión, Control de Daños y Guardado Temporal (Reset, Revert & Stash)
+* git reset HEAD~1
+  - Deshace el último commit manteniendo los cambios de tus archivos en el directorio de trabajo.
+* git reset --hard HEAD~1
+  - Elimina por completo el último commit y descarta todos los cambios realizados en los archivos.
+* git revert a1b2c3d
+  - Crea un nuevo commit que aplica los cambios inversos del commit especificado para anularlo de forma segura.
+* git stash
+  - Guarda temporalmente los cambios no comiteados en una pila oculta y limpia el directorio de trabajo.
+* git stash pop
+  - Recupera los últimos cambios guardados en el stash y los aplica al directorio de trabajo actual.
+
+H. Trabajo Remoto y Sincronización (Remote, Push, Pull & Fetch)
+* git remote -v
+  - Muestra las direcciones URL asociadas a las conexiones remotas.
+* git remote add origin git@github.com:usuario/mi-repo.git
+  - Conecta el repositorio local con un servidor remoto.
+* git push -u origin main
+  - Sube la rama local al servidor remoto por primera vez y establece la relación de rastreo.
+* git push
+  - Envía los nuevos commits locales a la rama remota vinculada.
+* git fetch origin
+  - Descarga las referencias y nuevos commits del servidor remoto sin modificar los archivos locales.
+* git pull
+  - Descarga y fusiona automáticamente los cambios del servidor remoto en la rama local actual.
